@@ -95,7 +95,13 @@ textarea {
    Author's custom styles
    ========================================================================== */
 
+body {
+    padding-top: 50px;
+}
 
+.sample-content {
+    height: 1000px;
+}
 
 
 
