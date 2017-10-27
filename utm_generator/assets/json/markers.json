@@ -1,0 +1,27 @@
+[
+  {
+    "name": "Default",
+    "value": "",
+    "selected": true
+  },
+  {
+    "name": "Time",
+    "value": "_time",
+    "selected": false
+  },
+  {
+    "name": "Hot Auctions",
+    "value": "_hotauctions",
+    "selected": false
+  },
+  {
+    "name": "Monthly PT",
+    "value": "_monthlypt",
+    "selected": false
+  },
+  {
+    "name": "Special Mail",
+    "value": "_specialmail",
+    "selected": false
+  }
+]

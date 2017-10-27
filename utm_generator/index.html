@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>UTM Generator</title>
+
+    <link rel="stylesheet" href="assets/vendor/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="assets/vendor/bulma-0.5.3/css/bulma.css">
+
+    <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+    <div class="main-title">
+        UTM Generator
+    </div>
+
+    <section class="section">
+        <div class="container">
+            <div id="app">
+                <form v-on:submit.prevent="generateUTM">
+                    <table>
+                        <tr>
+                            <td valign="middle" align="top">
+                                <div class="field">
+                                    <label class="label">URL:</label>
+                                    <div class="control">
+                                        <input class="input" type="text" placeholder="URL" v-model="url" value="{{ url }}" style="width:440px;">
+                                    </div>
+                                </div>
+                            </td>
+                            <td valign="middle" align="top">
+                                <div class="field">
+                                    <label class="label">Sale ID:</label>
+                                    <div class="control">
+                                        <input class="input" type="text" placeholder="" v-model="sale_id" value="{{ sale_id }}" style="width:240px;">
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                    <table>
+                        <tr>
+                            <td valign="middle" align="top">
+                                <div class="field">
+                                    <label class="label">UTM Source:</label>
+                                    <div class="control">
+                                        <input class="input" type="text" placeholder="UTM Source" v-model="utm_source" value="{{ utm_source }}" style="width:100px;">
+                                    </div>
+                                </div>
+                            </td>
+                            <td valign="middle" align="top">
+                                <div class="field">
+                                    <label class="label">UTM Medium:</label>
+                                    <div class="control">
+                                        <input class="input" type="text" placeholder="UTM Medium" v-model="utm_medium" value="{{ utm_medium }}" style="width:100px;">
+                                    </div>
+                                </div>
+                            </td>
+                            <td valign="middle" align="top">
+                                <div class="field">
+                                    <label class="label">UTM Content:</label>
+
+                                    <div class="control">
+                                        <div class="select">
+                                            <select v-model="utm_content">
+                                                <option v-for="utm in utmContentsOptions" :value="utm.value">
+                                                    {{ utm.name }}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <div class="sub-title">
+                        UTM Campaign
+                    </div>
+                        
+                    <table>
+                        <tr>
+                            <td valign="middle" align="top">
+                                <div class="field">
+                                    <label class="label">Marketplace:</label>
+                                    <div class="control">
+                                        <div class="select">
+                                            <select v-model="market_place">
+                                                <option value="GIDB">GoIndustry DoveBid</option>
+                                                <option value="NI">Network International</option>
+                                                <option value="GL">Government Liquidation</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td valign="middle" align="top">
+                                <div class="field">
+                                    <label class="label">Year:</label>
+                                    <div class="control">
+                                        <input class="input" type="text" placeholder="Year" v-model="year" style="width:100px;">
+                                    </div>
+                                </div>
+                            </td>
+                            <td valign="middle" align="top">
+                                <div class="field">
+                                    <label class="label">Quarter:</label>
+                                    <div class="control">
+                                        <div class="select">
+                                            <select v-model="quarter">
+                                                <option value="Q1">Q1</option>
+                                                <option value="Q2">Q2</option>
+                                                <option value="Q3">Q3</option>
+                                                <option value="Q4">Q4</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td valign="middle" align="top">
+                                <div class="field">
+                                    <label class="label">Month:</label>
+                                    <div class="control">
+                                        <div class="select">
+                                            <select v-model="month">
+                                                <option value="jan">January</option>
+                                                <option value="feb">February</option>
+                                                <option value="mar">March</option>
+                                                <option value="apr">April</option>
+                                                <option value="may">May</option>
+                                                <option value="june">June</option>
+                                                <option value="july">July</option>
+                                                <option value="aug">August</option>
+                                                <option value="sept">September</option>
+                                                <option value="oct">October</option>
+                                                <option value="nov">November</option>
+                                                <option value="dec">December</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td valign="middle" align="top">
+                                <div class="field">
+                                    <label class="label">Region:</label>
+                                    <div class="control">
+                                        <div class="select">
+                                            <select v-model="region">
+                                                <option value="APAC">APAC</option>
+                                                <option value="EMEA">EMEA</option>
+                                                <option value="NA">NA</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td valign="middle" align="top">
+                                <div class="field">
+                                    <label class="label">Country:</label>
+                                    <ul class="button">
+                                        <li v-for="(selectedCountry, index) in selectedCountries" style="display: inline-block;">
+                                            {{ index > 0 ? '_' : '' }}{{ selectedCountry.value }}
+                                        </li>
+                                    </ul>
+                                    <button type="button" class="button is-info" v-on:click="toggleCountriesModal">Select Countries</button>
+                                </div>
+                            </td>
+                            <td valign="middle" align="top">
+                                <div class="field">
+                                    <label class="label">Language:</label>
+                                    <ul class="button">
+                                        <li v-for="(selectedLanguage, index) in selectedLanguages" style="display: inline-block;">
+                                            {{ index > 0 ? '_' : '' }}{{ selectedLanguage.value }}
+                                        </li>
+                                    </ul>
+                                    <button type="button" class="button is-info" v-on:click="toggleLanguagesModal">Select Languages</button>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                    
+                    <table>
+                        <tr>
+                            <td valign="middle" align="top">
+                                <div class="field">
+                                    <label class="label">Sale ID:</label>
+                                    <div class="control">
+                                        <input class="input" type="text" placeholder="" v-model="sale_id" value="{{ sale_id }}" style="width:240px;">
+                                    </div>
+                                </div>
+                            </td>
+                            <td valign="middle" align="top">
+                                <div class="field">
+                                    <label class="label">Auction Type:</label>
+                                    <div class="control">
+                                        <div class="select">
+                                            <select v-model="auction_type">
+                                                <option value="IA">Internet Auction</option>
+                                                <option value="PT">Private Treaty</option>
+                                                <option value="SB">Sealed-Bid</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td valign="middle" align="top">
+                                <div class="field">
+                                    <label class="label">Email Number:</label>
+                                    <div class="control">
+                                        <input class="input" type="text" placeholder="" v-model="email_number" style="width:50px;">
+                                    </div>
+                                </div>
+                            </td>
+                            <td valign="middle" align="top">
+                                <div class="field">
+                                    <label class="label">Categories:</label>
+                                    <ul class="button">
+                                        <li v-for="(selectedCategory, index) in selectedCategories" style="display: inline-block;">
+                                            {{ index > 0 ? '/' : '' }}{{ selectedCategory.value }}
+                                        </li>
+                                    </ul>
+                                    <button type="button" class="button is-info" v-on:click="toggleCategoriesModal">Select Categories</button>
+                                </div>
+                            </td>
+                            <td valign="middle" align="top">
+                                <div class="field">
+                                    <label class="label">Content Marker</label>
+                                    <div class="select">
+                                        <select v-model="contentMarker">
+                                            <option v-for="(selectedCustomMarker, index) in contentMarkerOptions" :value="selectedCustomMarker.value" v-text="selectedCustomMarker.name"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                    
+                    <table width="100%">
+                        <tr>
+                            <td valign="middle" align="top">
+                                <div class="control">
+                                    <button class="button is-primary" type="submit">Generate UTM</button>
+                                    <button class="button is-info" type="button" v-on:click="resetForm">Reset</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td valign="middle" align="top">
+                                <div class="field">
+                                    <label class="label">Result:</label>
+                                    <div class="control">
+                                        <textarea class="textarea" rows="10" style="resize:none; height:60px;">{{ result }}</textarea>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+
+                <!-- Modals -->
+                <div class="modal" v-bind:class="{ 'is-active': isCategoriesModalActive }">
+                    <div class="modal-background"></div>
+                    <div class="modal-card">
+                        <header class="modal-card-head">
+                            <p class="modal-card-title">Categories</p>
+                            <button type="button" class="delete" aria-label="close" v-on:click="toggleCategoriesModal"></button>
+                        </header>
+                        <section class="modal-card-body">
+                            <div class="field">
+                                <label class="label">Search Categories:</label>
+                                <div class="control">
+                                    <input class="input" type="text" placeholder="Search Category" v-model="categoriesSearch">
+                                </div>
+                            </div>
+
+                            <ul>
+                                <li v-for="selectItem in filteredCategories">
+                                    <label class="checkbox">
+                                        <input type="checkbox" v-model="selectItem.selected">
+                                        {{ selectItem.name }}
+                                    </label>
+                                </li>
+                            </ul>
+                        </section>
+                        <footer class="modal-card-foot">
+                            <button type="button" class="button" v-on:click="toggleCategoriesModal">Close</button>
+                        </footer>
+                    </div>
+                </div>
+                <!-- Categories Modal -->
+
+                <div class="modal" v-bind:class="{ 'is-active': isCountriesModalActive }">
+                    <div class="modal-background"></div>
+                    <div class="modal-card">
+                        <header class="modal-card-head">
+                            <p class="modal-card-title">Countries</p>
+                            <button type="button" class="delete" aria-label="close" v-on:click="toggleCountriesModal"></button>
+                        </header>
+                        <section class="modal-card-body">
+                            <div class="field">
+                                <label class="label">Search Country:</label>
+                                <div class="control">
+                                    <input class="input" type="text" placeholder="Search Country" v-model="countriesSearch">
+                                </div>
+                            </div>
+
+                            <ul>
+                                <li v-for="selectItem in filteredCountries">
+                                    <label class="checkbox">
+                                        <input type="checkbox" v-model="selectItem.selected">
+                                        {{ selectItem.name }}
+                                    </label>
+                                </li>
+                            </ul>
+                        </section>
+                        <footer class="modal-card-foot">
+                            <button type="button" class="button" v-on:click="toggleCountriesModal">Close</button>
+                        </footer>
+                    </div>
+                </div>
+                <!-- Countries Modal -->
+
+                <div class="modal" v-bind:class="{ 'is-active': isLanguagesModalActive }">
+                    <div class="modal-background"></div>
+                    <div class="modal-card">
+                        <header class="modal-card-head">
+                            <p class="modal-card-title">Languages</p>
+                            <button type="button" class="delete" aria-label="close" v-on:click="toggleLanguagesModal"></button>
+                        </header>
+                        <section class="modal-card-body">
+                            <div class="field">
+                                <label class="label">Search Language:</label>
+                                <div class="control">
+                                    <input class="input" type="text" placeholder="Search Language" v-model="languagesSearch">
+                                </div>
+                            </div>
+
+                            <ul>
+                                <li v-for="selectItem in filteredLanguages">
+                                    <label class="checkbox">
+                                        <input type="checkbox" v-model="selectItem.selected">
+                                        {{ selectItem.name }}
+                                    </label>
+                                </li>
+                            </ul>
+                        </section>
+                        <footer class="modal-card-foot">
+                            <button type="button" class="button" v-on:click="toggleLanguagesModal">Close</button>
+                        </footer>
+                    </div>
+                </div>
+                <!-- Languages Modal -->
+            </div>
+        </div>
+    </section>
+
+    <script src="assets/vendor/underscorejs/underscore-min.js"></script>
+    <script src="assets/vendor/vue2/vue.min.js"></script>
+    <script src="assets/js/helpers.js"></script>
+    <script src="assets/js/options.js"></script>
+    <script src="assets/js/setters.js"></script>
+    <script src="assets/js/app.js"></script>
+</body>
+</html>

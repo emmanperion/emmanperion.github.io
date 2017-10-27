@@ -1,0 +1,28 @@
+.input, .select, .button, .textarea, li {
+    font-size: 12px;
+}
+
+.label {
+    font-size: 12px;
+}
+
+th, td {
+    padding: 8px 20px 8px 0;
+}
+
+.main-title {
+    background: #2BA6CB;
+    font-size: 18px;
+    font-weight: 600;
+    color: #fff;
+    width: 100%;
+    padding: 10px;
+}
+
+.sub-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #2BA6CB;
+    width: 100%;
+    padding: 10px 0 10px 0;
+}
