@@ -57,6 +57,7 @@ let Options = {
             {name: 'Week 1', value: 'week-1', selected: false},
             {name: 'Day-24', value: 'hr-24', selected: false},
             {name: 'Day+24', value: 'hr+24', selected: false},
+            {name: 'Hot Auctions', value: 'hotauctions', selected: false},
             {name: 'Monthly PT', value: 'monthlypt', selected: false},
             {name: 'Special Email', value: 'specialmail', selected: false},
         ];
